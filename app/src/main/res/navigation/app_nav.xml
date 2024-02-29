@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_nav"
+    app:startDestination="@id/splashScreen">
+
+    <fragment
+        android:id="@+id/allMusicScreen"
+        android:name="com.example.musicplayerservice.presentation.screen.AllMusicScreen"
+        android:label="screen_all_music"
+        tools:layout="@layout/screen_all_music" >
+
+        <action
+            android:id="@+id/action_allMusicScreen_to_playScreen2"
+            app:destination="@id/playScreen" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/splashScreen"
+        android:name="com.example.musicplayerservice.presentation.screen.SplashScreen"
+        android:label="SplashScreen"
+        tools:layout="@layout/screen_splash">
+        <action
+            android:id="@+id/action_splashScreen_to_allMusicScreen"
+            app:destination="@id/allMusicScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/playScreen"
+        android:name="com.example.musicplayerservice.presentation.screen.PlayScreen"
+        android:label="screen_play"
+        tools:layout="@layout/screen_play" />
+
+</navigation>
