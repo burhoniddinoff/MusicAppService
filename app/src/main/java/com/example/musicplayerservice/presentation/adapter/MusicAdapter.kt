@@ -20,10 +20,11 @@ class MusicAdapter : RecyclerView.Adapter<MusicAdapter.MyCursorViewHolder>() {
         }
 
         fun bind(pos: Int) {
-            cursor?.getMusicDataByPosition(absoluteAdapterPosition)?.let {
+            cursor?.getMusicDataByPosition(absoluteAdapterPosition, )?.let {
                 binding.songTitle.text = it.title
                 binding.songArtist.text = it.artist
                 binding.tvOrder.text = "${pos.plus(1)}"
+
             }
         }
     }

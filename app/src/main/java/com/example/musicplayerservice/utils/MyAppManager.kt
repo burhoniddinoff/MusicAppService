@@ -18,4 +18,8 @@ object MyAppManager {
     val playMusicLiveData = MutableLiveData<MusicData>()
     val isPlayingLiveData = MutableLiveData<Boolean>()
     var isRepeatLiveData = MutableLiveData<Boolean>()
+    val newMusic = MutableLiveData<Unit>()
+
+    var isChanged = false
+
 }

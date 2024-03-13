@@ -7,5 +7,5 @@ enum class ActionEnum(val pos: Int) {
     NEXT(3),
     PREV(4),
     CANCEL(5),
-    REPEAT(6)
+    REPEAT(6),
 }

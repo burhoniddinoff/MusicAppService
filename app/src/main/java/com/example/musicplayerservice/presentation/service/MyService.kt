@@ -16,6 +16,7 @@ import com.example.musicplayerservice.R
 import com.example.musicplayerservice.data.ActionEnum
 import com.example.musicplayerservice.data.MusicData
 import com.example.musicplayerservice.utils.MyAppManager
+import com.example.musicplayerservice.utils.MyAppManager.currentTimeLiveData
 import com.example.musicplayerservice.utils.getMusicDataByPosition
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +45,7 @@ class MyService : Service() {
         createChannel()
         startMyService()
 
+
     }
 
     private fun createChannel() {
@@ -56,11 +58,13 @@ class MyService : Service() {
         }
     }
 
+
     private fun startMyService() {
         val notification: Notification = NotificationCompat.Builder(this, channel)
             .setSmallIcon(R.drawable.ic_shuffle)
             .setContentText("Hello bro!")
             .setContentTitle("What's up?")
+//            .setOngoing(isPlaying)
             .setCustomContentView(createRemoteView())
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .build()
@@ -116,12 +120,9 @@ class MyService : Service() {
                 mediaPlayer.setOnCompletionListener { doneCommand(ActionEnum.NEXT) }
                 MyAppManager.fullTime = data.duration
                 mediaPlayer.seekTo(MyAppManager.currentTime.toInt())
-                job?.cancel()
-
+                job?.let { it.cancel() }
                 job = scope.launch {
                     changeProgress().collectLatest {
-                        MyAppManager.currentTime = it
-                        MyAppManager.currentTimeLiveData.postValue(it)
                     }
                 }
 
@@ -160,12 +161,29 @@ class MyService : Service() {
                 mediaPlayer.isLooping = !mediaPlayer.isLooping
             }
 
+//            ActionEnum.SEEKBAR -> {
+//                mediaPlayer.seekTo(MyAppManager.currentTime.toInt())
+//                job?.cancel()
+//                job = scope.launch {
+//                    changeProgress().collectLatest {
+//                        MyAppManager.currentTime = it
+//                        currentTimeLiveData.postValue(it)
+//                    }
+//                }
+//            }
+
         }
     }
 
     private fun changeProgress(): Flow<Long> = flow {
         for (i in MyAppManager.currentTime until MyAppManager.fullTime step 1000) {
             delay(1000)
+            if (MyAppManager.isChanged) {
+                MyAppManager.currentTime += 1000
+                emit(MyAppManager.currentTime)
+                currentTimeLiveData.postValue(MyAppManager.currentTime)
+                mediaPlayer.seekTo(MyAppManager.currentTime.toInt())
+            }
             emit(i)
         }
     }

@@ -1,13 +1,10 @@
 package com.example.musicplayerservice.presentation.screen
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
-import android.widget.SeekBar
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -30,6 +27,7 @@ class AllMusicScreen : Fragment(R.layout.screen_all_music) {
 
         setUpRV()
         init()
+        isVisibleMusic(false)
 
     }
 
@@ -70,6 +68,7 @@ class AllMusicScreen : Fragment(R.layout.screen_all_music) {
     }
 
     private val playMusicObserver = Observer<MusicData> { data ->
+        isVisibleMusic(true)
         binding.apply {
             textMusicNameScreen.text = data.title
             textArtistNameScreen.text = data.artist
@@ -81,5 +80,20 @@ class AllMusicScreen : Fragment(R.layout.screen_all_music) {
         else binding.buttonManageScreen.setImageResource(R.drawable.ic_play_2)
     }
 
+    private fun isVisibleMusic(bool: Boolean) {
+        binding.apply {
+            if (bool) {
+                bottomPart.isVisible = true
+                imageMusic.isVisible = true
+                textMusicNameScreen.isVisible = true
+                textArtistNameScreen.isVisible = true
+            } else {
+                bottomPart.isVisible = false
+                imageMusic.isVisible = false
+                textMusicNameScreen.isVisible = false
+                textArtistNameScreen.isVisible = false
+            }
+        }
+    }
 
 }

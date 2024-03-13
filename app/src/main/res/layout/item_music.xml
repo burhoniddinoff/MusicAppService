@@ -26,6 +26,8 @@
             android:id="@+id/song_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="song title"
             android:textColor="@color/white"
             android:textSize="18sp"

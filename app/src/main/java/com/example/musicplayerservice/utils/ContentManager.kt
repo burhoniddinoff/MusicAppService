@@ -39,7 +39,7 @@ fun Cursor.getMusicDataByPosition(pos: Int): MusicData {
     val coverBytes = retriever.embeddedPicture
 
     val bitmap = when (coverBytes != null) {
-        true -> BitmapFactory.decodeByteArray(coverBytes, 0, coverBytes.size);
+        true -> BitmapFactory.decodeByteArray(coverBytes, 0, coverBytes.size)
         else -> null
     }
 
@@ -50,5 +50,6 @@ fun Cursor.getMusicDataByPosition(pos: Int): MusicData {
         this.getString(2),
         data = file,
         this.getLong(4),
+        bitmap
     )
 }

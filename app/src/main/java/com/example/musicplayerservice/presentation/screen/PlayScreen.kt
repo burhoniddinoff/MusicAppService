@@ -1,8 +1,6 @@
 package com.example.musicplayerservice.presentation.screen
 
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.media.MediaMetadataRetriever
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -25,7 +23,16 @@ class PlayScreen : Fragment(R.layout.screen_play) {
         binding.ibForwardSong.setOnClickListener { startMyService(ActionEnum.NEXT) }
         binding.ibBackwardSong.setOnClickListener { startMyService(ActionEnum.PREV) }
         binding.ibPlay.setOnClickListener { startMyService(ActionEnum.MANAGE) }
-        binding.seekBar.setChangeProgress { }
+
+        binding.seekBar.setChangeProgress { progress, fromUser ->
+            if (fromUser) {
+                val newPosition = progress * MyAppManager.fullTime / 100
+                MyAppManager.currentTime = newPosition
+                MyAppManager.isChanged = true
+                MyAppManager.currentTimeLiveData.postValue(newPosition)
+                binding.tvCurrentTime.text = Constants.durationConverter(newPosition)
+            }
+        }
 
         MyAppManager.playMusicLiveData.observe(viewLifecycleOwner, playMusicObserver)
         MyAppManager.isPlayingLiveData.observe(viewLifecycleOwner, isPlayingObserver)
@@ -34,14 +41,20 @@ class PlayScreen : Fragment(R.layout.screen_play) {
 
     private val playMusicObserver = Observer<MusicData> {
 
+//        binding.seekBar.progress = MyAppManager.currentTime.toInt()
+//        binding.seekBar.max = MyAppManager.fullTime.toInt()
+//        binding.tvTitle.text = it.title
+//        binding.tvAuthor.text = it.artist
+//        binding.ibCover.setImageBitmap(it.image)
+//
+//        binding.tvCurrentTime.text = Constants.durationConverter(MyAppManager.currentTime)
+//        binding.tvDuration.text = Constants.durationConverter(it.duration)
+
         binding.seekBar.progress = (MyAppManager.currentTime * 100 / MyAppManager.fullTime).toInt()
         binding.tvTitle.text = it.title
         binding.tvAuthor.text = it.artist
-
-        binding.tvCurrentTime.text = Constants.durationConverter(MyAppManager.currentTime)
+        binding.tvCurrentTime.text = MyAppManager.currentTime.toString()
         binding.tvDuration.text = Constants.durationConverter(it.duration)
-
-
 
     }
 

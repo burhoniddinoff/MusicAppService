@@ -1,22 +1,31 @@
 package com.example.musicplayerservice.utils
 
 import android.widget.SeekBar
+import java.util.concurrent.TimeUnit
 
-fun SeekBar.setChangeProgress(block: (Int) -> Unit) {
-    this.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+fun SeekBar.setChangeProgress(block: (progress: Int, fromUser: Boolean) -> Unit) {
+    this.setOnSeekBarChangeListener(object :
+        SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+
+            seekBar?.let { block.invoke(it.progress, fromUser) }
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar?) {
 
         }
 
-        override fun onStartTrackingTouch(p0: SeekBar?) {
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {
 
-        }
-
-        override fun onStopTrackingTouch(p0: SeekBar?) {
-            p0?.let {
-                block.invoke(it.progress)
-            }
         }
     })
 }
 
+fun Long.durationConverter(): String {
+    return String.format(
+        "%02d:%02d",
+        TimeUnit.MILLISECONDS.toMinutes(this),
+        TimeUnit.MILLISECONDS.toSeconds(this) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(this))
+    )
+}
