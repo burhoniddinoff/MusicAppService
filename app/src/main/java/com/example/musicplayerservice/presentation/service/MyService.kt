@@ -65,7 +65,6 @@ class MyService : Service() {
             .setContentText("Hello bro!")
             .setContentTitle("What's up?")
 //            .setOngoing(isPlaying)
-            .setCustomContentView(createRemoteView())
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .build()
 
